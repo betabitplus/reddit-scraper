@@ -52,6 +52,20 @@ print(env_prefix)
 PY
 }
 
+py_lib_load_project_env_config() {
+  local repo_root="${1:-$(pwd)}"
+  local config_lines
+  mapfile -t config_lines < <(py_lib_read_project_env_config "$repo_root") || return 1
+
+  if [ "${#config_lines[@]}" -ne 1 ]; then
+    return 1
+  fi
+
+  PY_LIB_PROJECT_ENV_PREFIX="${config_lines[0]}"
+
+  export PY_LIB_PROJECT_ENV_PREFIX
+}
+
 py_lib_expand_env_file_path() {
   local env_file_path="$1"
 
@@ -72,20 +86,6 @@ py_lib_expand_env_file_path() {
       printf '%s\n' "$env_file_path"
       ;;
   esac
-}
-
-py_lib_load_project_env_config() {
-  local repo_root="${1:-$(pwd)}"
-  local config_lines
-  mapfile -t config_lines < <(py_lib_read_project_env_config "$repo_root") || return 1
-
-  if [ "${#config_lines[@]}" -ne 1 ]; then
-    return 1
-  fi
-
-  PY_LIB_PROJECT_ENV_PREFIX="${config_lines[0]}"
-
-  export PY_LIB_PROJECT_ENV_PREFIX
 }
 
 py_lib_find_betabit_secrets_root() {
@@ -119,7 +119,7 @@ py_lib_dotenv_sops_if_exists() {
     return 0
   fi
   if ! command -v sops >/dev/null 2>&1; then
-    printf 'Encrypted env file exists but `sops` is missing: %s\n' "$env_file" >&2
+    printf 'Encrypted env file exists but sops is missing: %s\n' "$env_file" >&2
     return 1
   fi
 

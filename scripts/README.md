@@ -35,8 +35,7 @@ package_names = project_config.package_names
 
 - `env/`
   Local contributor environment setup and health checks. `project_config.sh`
-  reads `[tool.py_lib_starter]` from `pyproject.toml` and loads browser
-  automation proxy env when present.
+  reads `[tool.py_lib_starter]` from `pyproject.toml`.
 
 Use shared smoke commands directly:
 
