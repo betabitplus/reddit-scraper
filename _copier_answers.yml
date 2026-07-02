@@ -26,7 +26,6 @@ e2e_slices:
     path: tests/reddit_scraper/e2e/subreddit_posts
   - name: user-data
     path: tests/reddit_scraper/e2e/user_data
-env_file_default: $HOME/researcher-local/.env
 env_prefix: REDDIT_SCRAPER
 error_class_name: RedditScraperError
 github_owner: betabitplus
