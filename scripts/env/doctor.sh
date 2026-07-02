@@ -85,22 +85,6 @@ else
   fail "Could not read [tool.py_lib_starter] env config from pyproject.toml."
 fi
 
-secrets_root="$(py_lib_find_betabit_secrets_root "$repo_root" 2>/dev/null || true)"
-browser_automation_proxy_file="${secrets_root}/browser-automation/proxy.sops.env"
-
-if [ -n "$secrets_root" ]; then
-  if [ -f "$browser_automation_proxy_file" ]; then
-    pass "Found browser automation proxy env file"
-    require_command "sops" "Install sops to load the browser automation proxy env."
-
-    if [ -n "${SOPS_AGE_KEY_FILE:-}" ] || [ -n "${SOPS_AGE_KEY:-}" ] || [ -f "${HOME}/.config/sops/age/keys.txt" ]; then
-      pass "SOPS age key is configured"
-    else
-      warn "SOPS age key is not configured. Restore it to ~/.config/sops/age/keys.txt or set SOPS_AGE_KEY_FILE."
-    fi
-  fi
-fi
-
 pre_commit_hook="$(git rev-parse --git-path hooks/pre-commit)"
 pre_push_hook="$(git rev-parse --git-path hooks/pre-push)"
 

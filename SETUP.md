@@ -8,20 +8,6 @@ workflow, tests, hooks, and release conventions, use
 
 - Python 3.13+
 - `uv` installed
-- optional `sops` and `age` for browser automation proxy env loading
-
-Some e2e and workbench flows use `HTTP_PROXY` or `HTTPS_PROXY`. `.envrc` loads
-them from this SOPS file when present:
-
-- `../betabit-secrets/browser-automation/proxy.sops.env`
-
-Set `BETABIT_SECRETS_ROOT` to use a different local path.
-
-Edit it with SOPS:
-
-```bash
-sops ../betabit-secrets/browser-automation/proxy.sops.env
-```
 
 ## First-Time Setup
 
