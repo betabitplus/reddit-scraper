@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 secrets_root="${BETABIT_SECRETS_ROOT:-}"
 if [ -z "$secrets_root" ]; then
   secrets_root="$PWD/../betabit-secrets"
