@@ -28,6 +28,10 @@ response = reddit_scraper.search_reddit(
 print(response.count)
 ```
 
+Proxy-backed e2e and workbench flows read `HTTP_PROXY` / `HTTPS_PROXY` from
+`../betabit-secrets/browser-automation/proxy.sops.env` through `direnv` +
+`sops`. Set `BETABIT_SECRETS_ROOT` only if the secrets checkout lives elsewhere.
+
 ## Docs
 
 - [Package docs](docs/reddit_scraper/README.md)
