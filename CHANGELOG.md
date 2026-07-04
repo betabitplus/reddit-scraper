@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2.6 (2026-07-04)
+
+### Fix
+
+- promote repository rename sync
+- sync repository rename references
+
 ## v0.2.5 (2026-06-21)
 
 ### Fix
