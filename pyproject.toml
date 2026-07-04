@@ -33,10 +33,10 @@ dependencies = [
   "tenacity>=9.1.4",
 ]
 # --- Project URLs ---
-urls."Bug Tracker" = "https://github.com/betabitplus/reddit_scraper/issues"
-urls.Documentation = "https://github.com/betabitplus/reddit_scraper/tree/main/docs"
-urls.Homepage = "https://github.com/betabitplus/reddit_scraper"
-urls.Repository = "https://github.com/betabitplus/reddit_scraper"
+urls."Bug Tracker" = "https://github.com/betabitplus/reddit-scraper/issues"
+urls.Documentation = "https://github.com/betabitplus/reddit-scraper/tree/main/docs"
+urls.Homepage = "https://github.com/betabitplus/reddit-scraper"
+urls.Repository = "https://github.com/betabitplus/reddit-scraper"
 
 [dependency-groups]
 dev = [
