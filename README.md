@@ -29,8 +29,11 @@ print(response.count)
 ```
 
 Proxy-backed e2e and workbench flows read `HTTP_PROXY` / `HTTPS_PROXY` from
-`../betabit-secrets/browser-automation/proxy.sops.env` through `direnv` +
-`sops`. Set `BETABIT_SECRETS_ROOT` only if the secrets checkout lives elsewhere.
+`betabit-secrets/browser-automation/proxy.sops.env` through
+`scripts/env/secrets.sh`, which is wired by `.envrc` from the
+`[tool.py_lib_starter.secrets]` declaration in `pyproject.toml`. The loader
+clones `https://github.com/betabitplus/betabit-secrets.git` into the user data
+cache when the checkout is missing.
 
 ## Docs
 
