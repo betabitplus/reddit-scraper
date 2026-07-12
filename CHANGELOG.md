@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.0 (2026-07-12)
+
+### Feat
+
+- **env**: configure shared proxy secrets (#45)
+
 ## v0.2.6 (2026-07-04)
 
 ### Fix
