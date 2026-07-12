@@ -413,7 +413,7 @@ primary_package = "reddit_scraper"
 package_names = [ "reddit_scraper" ]
 library_lane = "standard-lib"
 env_prefix = "REDDIT_SCRAPER"
-secrets.env_files = []
+secrets.env_files = [ "browser-automation/proxy.sops.env" ]
 
 # ---------------- Pip Audit (dependency vulnerability scanning) ----------------
 [tool.pip-audit]
