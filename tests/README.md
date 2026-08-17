@@ -5,7 +5,7 @@ tests.
 
 ## Shared Tooling Support
 
-`py_lib_tooling` contains reusable testing infrastructure that is
+`py_lib_testkit` contains reusable testing infrastructure that is
 not tied to a project package domain.
 
 Typical contents:
@@ -16,7 +16,7 @@ Typical contents:
 - generic pytest-process setup
 
 Shared tooling support may read repository metadata from
-`[tool.py_lib_starter]`, but it should not import the product package or assume
+`[tool.ternforge]`, but it should not import the product package or assume
 its public APIs.
 
 ## Package-Specific Support

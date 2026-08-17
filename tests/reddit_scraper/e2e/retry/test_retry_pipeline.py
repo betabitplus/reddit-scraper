@@ -33,7 +33,7 @@ from __future__ import annotations
 import os
 
 import pytest
-from py_lib_tooling import (
+from py_lib_testkit import (
     console,
     require_vcr_cassette_or_record_mode,
 )

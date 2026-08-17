@@ -30,7 +30,7 @@ import shutil
 from pathlib import Path
 from typing import Any
 
-from py_lib_tooling import console
+from py_lib_testkit import console
 
 from workbench.reddit_scraper._reddit_json import (
     DEFAULT_TIMEOUT_SECONDS,
