@@ -11,7 +11,7 @@ from collections.abc import Generator
 from typing import Any
 
 import pytest
-from py_lib_tooling import method_case_insensitive
+from py_lib_testkit import method_case_insensitive
 from syrupy.assertion import SnapshotAssertion
 from syrupy.extensions.json import JSONSnapshotExtension
 

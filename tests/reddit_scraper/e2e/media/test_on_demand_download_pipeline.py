@@ -33,7 +33,7 @@ from pathlib import Path
 
 import pytest
 from IPython.display import Image, Markdown, display
-from py_lib_tooling import (
+from py_lib_testkit import (
     console,
     require_vcr_cassette_or_record_mode,
 )

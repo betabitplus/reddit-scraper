@@ -11,6 +11,6 @@ When to use:
 
 from __future__ import annotations
 
-from py_lib_tooling import configure_pytest_process
+from py_lib_testkit import configure_pytest_process
 
 configure_pytest_process()

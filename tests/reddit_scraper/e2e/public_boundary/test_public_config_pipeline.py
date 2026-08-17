@@ -9,7 +9,7 @@ Why:
 from __future__ import annotations
 
 import pytest
-from py_lib_tooling import console
+from py_lib_testkit import console
 
 from reddit_scraper import (
     RedditScraperConfig,
