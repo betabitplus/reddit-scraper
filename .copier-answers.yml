@@ -8,8 +8,6 @@ copyright_year: '2026'
 e2e_slices:
 -   name: public-boundary
     path: tests/reddit_scraper/e2e/public_boundary
--   name: examples
-    path: tests/reddit_scraper/e2e/examples
 -   name: cache
     path: tests/reddit_scraper/e2e/cache
 -   name: feeds
@@ -33,7 +31,7 @@ gitignore_extra_patterns: []
 initial_version: 0.3.0
 package_name: reddit_scraper
 pip_audit_waivers:
--   id: CVE-2025-69872
+-   id: PYSEC-2026-2447
     rationale: DiskCache 5.6.3 has no patched upstream release; exploitation requires
         attacker write access to the cache directory before a victim read, so this
         preserves the repository-specific risk acceptance already present before migration.

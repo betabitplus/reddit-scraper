@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import cache
 from typing import TYPE_CHECKING
 
@@ -31,6 +31,7 @@ class ResolvedClientConfig:
     """Resolved, defaulted client configuration."""
 
     proxy: str | None
+    session_cookie: str | None = field(repr=False)
     timeout: float
     random_user_agent: bool
     max_retries: int
@@ -121,6 +122,7 @@ class RedditScraperResolver:
 
         return ResolvedClientConfig(
             proxy=client.proxy,
+            session_cookie=client.session_cookie,
             timeout=resolved_timeout,
             random_user_agent=defaults.network.random_user_agent,
             max_retries=defaults.network.max_retries,

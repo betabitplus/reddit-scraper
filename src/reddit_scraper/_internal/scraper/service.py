@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import cache
 from typing import Any, cast
 
@@ -66,6 +66,7 @@ class ScraperConfig:
     # pylint: disable=too-many-instance-attributes
 
     proxy: str | None = None
+    session_cookie: str | None = field(default=None, repr=False)
     timeout: float | None = None
     random_user_agent: bool | None = None
     max_retries: int | None = None
@@ -130,6 +131,7 @@ class RedditScraper(UserMixin, FeedMixin):
             timeout=self.timeout,
             max_retries=self._max_retries,
             proxy=config.proxy,
+            session_cookie=config.session_cookie,
         )
 
         media_config, media_cache_dir = resolve_media_config(
@@ -463,6 +465,7 @@ def _build_scraper_config(resolved: ResolvedClientConfig) -> ScraperConfig:
     """Build ScraperConfig from resolved client settings."""
     return ScraperConfig(
         proxy=resolved.proxy,
+        session_cookie=resolved.session_cookie,
         timeout=resolved.timeout,
         random_user_agent=resolved.random_user_agent,
         max_retries=resolved.max_retries,

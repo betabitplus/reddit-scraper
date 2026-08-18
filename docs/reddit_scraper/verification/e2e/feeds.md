@@ -60,16 +60,19 @@ Why this is sufficient:
 
 - Multiple feed families are exercised in one scenario with stable replay.
 - The proof catches accidental mixing of frontpage, all, and popular behavior.
+- Live execution requires non-empty `all` and `popular` results while reporting
+  the authenticated home/frontpage count as account-dependent evidence.
 
 Would fail if:
 
 - Feed-specific options stopped influencing the provider request.
-- Feed results stopped returning caller-visible post summaries.
+- The non-personalized `all` or `popular` live feeds stopped returning posts.
 
 ## 2. Proof: Geographic Filters
 
 This proof area shows that geo-filtered popular feeds remain supported and
-produce visible regional evidence.
+return caller-visible results for each requested region. Regional ranking
+changes are provider output and are observed when present, not guaranteed.
 
 ### Seen In Tests
 
@@ -96,13 +99,14 @@ Walkthrough:
 
 Why this is sufficient:
 
-- The proof verifies the caller can pass geo filters without provider errors.
-- Comparing regions catches a filter path that silently ignores the geo value.
+- The proof verifies each geo-filtered public call returns non-empty provider data.
+- The committed cassettes preserve the distinct provider requests while the
+  snapshot records the caller-visible comparison without assuming rankings must differ.
 
 Would fail if:
 
-- Geo filter options stopped reaching popular feed requests.
-- Region-specific responses were normalized into indistinguishable output.
+- A geo-filtered popular-feed request stopped returning caller-visible posts.
+- Provider/request drift stopped the scenario from completing for one of the regions.
 
 ## 3. Proof: Pagination And Time Filters
 

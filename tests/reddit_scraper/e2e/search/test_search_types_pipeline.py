@@ -76,7 +76,11 @@ def load_inputs() -> dict:
 def run_pipeline(proxy: str | None, timeout: int) -> dict:
     """Run search type filtering pipeline."""
     with reddit_scraper.RedditScraper(
-        config=reddit_scraper.ScraperConfig(proxy=proxy, timeout=timeout)
+        config=reddit_scraper.ScraperConfig(
+            proxy=proxy,
+            session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
+            timeout=timeout,
+        )
     ) as scraper:
         post_results = scraper.search_reddit(
             SEARCH_QUERY,
@@ -126,8 +130,17 @@ def serialize_response(response: dict) -> dict:
 # =============================================================================
 
 
-def assert_pipeline_response(actual: object, snapshot: SnapshotAssertion) -> None:
-    """Verify the serialized response matches the committed scenario snapshot."""
+def assert_live_pipeline_response(actual: dict) -> None:
+    """Require both live search result types to return real evidence."""
+    assert int(actual.get("post_count") or 0) > 0
+    assert int(actual.get("sr_count") or 0) > 0
+    assert actual.get("post_titles")
+    assert actual.get("sr_titles")
+
+
+def assert_pipeline_response(actual: dict, snapshot: SnapshotAssertion) -> None:
+    """Verify semantic behavior before matching the committed scenario snapshot."""
+    assert_live_pipeline_response(actual)
     assert actual == snapshot
 
 
@@ -214,6 +227,7 @@ def main() -> None:
             "[key]Permalink:[/key] "
             f"[value]{item.get('permalink') or item.get('link')}[/value]"
         )
+    assert_live_pipeline_response(result_summary)
 
 
 if __name__ == "__main__":

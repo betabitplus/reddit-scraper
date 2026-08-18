@@ -62,6 +62,7 @@ _SEARCH_TYPES = st.one_of(
 
 @given(
     proxy=_OPTIONAL_TEXT,
+    session_cookie=_OPTIONAL_TEXT,
     timeout=_OPTIONAL_TIMEOUT,
     cache_dir=_OPTIONAL_TEXT,
     cache_enabled=_OPTIONAL_BOOL,
@@ -69,6 +70,7 @@ _SEARCH_TYPES = st.one_of(
 def test_client_options_preserve_explicit_values(
     *,
     proxy: str | None,
+    session_cookie: str | None,
     timeout: float | None,
     cache_dir: str | None,
     cache_enabled: bool | None,
@@ -76,12 +78,14 @@ def test_client_options_preserve_explicit_values(
     """Generated client options should keep caller-provided values unchanged."""
     options = reddit_scraper.ClientOptions(
         proxy=proxy,
+        session_cookie=session_cookie,
         timeout=timeout,
         cache_dir=cache_dir,
         cache_enabled=cache_enabled,
     )
 
     assert options.proxy == proxy
+    assert options.session_cookie == session_cookie
     assert options.timeout == timeout
     assert options.cache_dir == cache_dir
     assert options.cache_enabled == cache_enabled

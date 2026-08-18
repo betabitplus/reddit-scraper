@@ -85,7 +85,11 @@ def run_pipeline(
 ) -> dict:
     """Run retry/backoff validation pipeline."""
     with reddit_scraper.RedditScraper(
-        config=reddit_scraper.ScraperConfig(proxy=proxy, timeout=timeout)
+        config=reddit_scraper.ScraperConfig(
+            proxy=proxy,
+            session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
+            timeout=timeout,
+        )
     ) as scraper:
         results = [
             scraper.search_reddit(
@@ -119,8 +123,17 @@ def serialize_response(response: dict) -> dict:
 # =============================================================================
 
 
-def assert_pipeline_response(actual: object, snapshot: SnapshotAssertion) -> None:
-    """Verify the serialized response matches the committed scenario snapshot."""
+def assert_live_pipeline_response(actual: dict) -> None:
+    """Require valid live queries to succeed while the invalid subreddit stays empty."""
+    query_counts = actual.get("queries") or []
+    assert query_counts
+    assert all(int(count) > 0 for count in query_counts)
+    assert actual.get("invalid_empty") is True
+
+
+def assert_pipeline_response(actual: dict, snapshot: SnapshotAssertion) -> None:
+    """Verify semantic behavior before matching the committed scenario snapshot."""
+    assert_live_pipeline_response(actual)
     assert actual == snapshot
 
 
@@ -229,6 +242,7 @@ def main() -> None:
         f"[key]Meets expectation (0):[/key] "
         f"[value]{'yes' if invalid_count == 0 else 'no'}[/value]"
     )
+    assert_live_pipeline_response(result_summary)
 
 
 if __name__ == "__main__":

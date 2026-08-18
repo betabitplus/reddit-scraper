@@ -115,7 +115,11 @@ def run_pipeline(
     result: dict[str, object] = {}
 
     with reddit_scraper.RedditScraper(
-        config=reddit_scraper.ScraperConfig(proxy=proxy, timeout=timeout)
+        config=reddit_scraper.ScraperConfig(
+            proxy=proxy,
+            session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
+            timeout=timeout,
+        )
     ) as scraper:
         image_url, title = find_image_url(scraper)
 
@@ -181,8 +185,19 @@ def serialize_response(response: dict) -> dict:
 # =============================================================================
 
 
-def assert_pipeline_response(actual: object, snapshot: SnapshotAssertion) -> None:
-    """Verify the serialized response matches the committed scenario snapshot."""
+def assert_live_pipeline_response(actual: dict) -> None:
+    """Require live image discovery, download, and second-read cache reuse."""
+    assert actual.get("image_found") is True
+    assert actual.get("downloaded") is True
+    assert actual.get("from_cache") is False
+    assert actual.get("cache_first") is False
+    assert actual.get("cache_second") is True
+    assert int(actual.get("cache_hits") or 0) > 0
+
+
+def assert_pipeline_response(actual: dict, snapshot: SnapshotAssertion) -> None:
+    """Verify semantic behavior before matching the committed scenario snapshot."""
+    assert_live_pipeline_response(actual)
     assert actual == snapshot
 
 
@@ -279,6 +294,7 @@ def main() -> None:
     elif response.get("image_url"):
         alt_text = response.get("image_title") or "image"
         display(Markdown(f"![{alt_text}]({response['image_url']})"))
+    assert_live_pipeline_response(serialize_response(response))
 
 
 if __name__ == "__main__":

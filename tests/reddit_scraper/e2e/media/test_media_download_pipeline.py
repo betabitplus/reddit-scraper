@@ -185,7 +185,11 @@ def run_pipeline(
 
     # Test 1: Media disabled by default
     with reddit_scraper.RedditScraper(
-        config=reddit_scraper.ScraperConfig(proxy=proxy, timeout=timeout)
+        config=reddit_scraper.ScraperConfig(
+            proxy=proxy,
+            session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
+            timeout=timeout,
+        )
     ) as scraper:
         stats = scraper.media_stats()
     results["media_enabled_default"] = stats.get("enabled")
@@ -201,6 +205,7 @@ def run_pipeline(
     with reddit_scraper.RedditScraper(
         config=reddit_scraper.ScraperConfig(
             proxy=proxy,
+            session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
             timeout=timeout,
             media_config=config_stats,
             media_cache_dir=str(media_cache_dir),
@@ -246,8 +251,20 @@ def serialize_response(response: dict) -> dict:
 # =============================================================================
 
 
-def assert_pipeline_response(actual: object, snapshot: SnapshotAssertion) -> None:
-    """Verify the serialized response matches the committed scenario snapshot."""
+def assert_live_pipeline_response(actual: dict) -> None:
+    """Require real media download and cache outcomes, not printed diagnostics only."""
+    assert actual.get("media_enabled_default") is False
+    assert actual.get("stats_keys_present") is True
+    assert actual.get("abort_downloaded") is True
+    assert int(actual.get("abort_direct_downloads") or 0) > 0
+    assert actual.get("cache_first_downloaded") is True
+    assert actual.get("cache_second_downloaded") is True
+    assert int(actual.get("cache_hits") or 0) > 0
+
+
+def assert_pipeline_response(actual: dict, snapshot: SnapshotAssertion) -> None:
+    """Verify semantic behavior before matching the committed scenario snapshot."""
+    assert_live_pipeline_response(actual)
     assert actual == snapshot
 
 
@@ -392,6 +409,7 @@ def main() -> None:
     response = run_pipeline(**inputs)
     _print_demo_scenario(proxy)
     _print_demo_results(response)
+    assert_live_pipeline_response(serialize_response(response))
 
 
 if __name__ == "__main__":

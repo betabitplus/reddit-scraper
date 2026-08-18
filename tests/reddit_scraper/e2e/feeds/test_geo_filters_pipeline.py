@@ -79,7 +79,11 @@ def load_inputs() -> dict:
 def run_pipeline(proxy: str | None, timeout: int) -> dict:
     """Run geo filter pipeline."""
     with reddit_scraper.RedditScraper(
-        config=reddit_scraper.ScraperConfig(proxy=proxy, timeout=timeout)
+        config=reddit_scraper.ScraperConfig(
+            proxy=proxy,
+            session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
+            timeout=timeout,
+        )
     ) as scraper:
         us_posts = scraper.fetch_popular(
             options=reddit_scraper.PopularFeedOptions(
@@ -132,8 +136,16 @@ def serialize_response(response: dict) -> dict:
 # =============================================================================
 
 
-def assert_pipeline_response(actual: object, snapshot: SnapshotAssertion) -> None:
-    """Verify the serialized response matches the committed scenario snapshot."""
+def assert_live_pipeline_response(actual: dict) -> None:
+    """Require every requested regional feed to return real provider data."""
+    assert int(actual.get("us_count") or 0) > 0
+    assert int(actual.get("au_count") or 0) > 0
+    assert int(actual.get("ru_count") or 0) > 0
+
+
+def assert_pipeline_response(actual: dict, snapshot: SnapshotAssertion) -> None:
+    """Verify semantic behavior before matching the committed scenario snapshot."""
+    assert_live_pipeline_response(actual)
     assert actual == snapshot
 
 
@@ -178,8 +190,8 @@ def main() -> None:
 
     console.rule("[subheader]Scenario[/subheader]")
     console.print(
-        "[info]Compare popular feeds by geo filter "
-        "to confirm regional differences.[/info]"
+        "[info]Compare provider responses for several popular-feed geo filters. "
+        "Regional differences are observational, not guaranteed.[/info]"
     )
 
     console.rule("[subheader]Inputs[/subheader]")
@@ -250,6 +262,7 @@ def main() -> None:
         "[key]Permalink:[/key] "
         f"[value]{ru_sample.get('permalink') or ru_sample.get('link')}[/value]"
     )
+    assert_live_pipeline_response(result_summary)
 
 
 if __name__ == "__main__":

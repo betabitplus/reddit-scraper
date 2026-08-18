@@ -48,7 +48,7 @@ def search_reddit(
     Args:
         query: Search query string
         options: Optional search options (limit, cursors, search types)
-        client: Optional client options (proxy, timeout, cache)
+        client: Optional client options (proxy, session, timeout, cache)
 
     Returns:
         SearchResponse with results and metadata
@@ -83,7 +83,7 @@ def search_subreddit(
         subreddit: Subreddit name (without r/)
         query: Search query string
         options: Optional search options (limit, cursors, sort, types)
-        client: Optional client options (proxy, timeout, cache)
+        client: Optional client options (proxy, session, timeout, cache)
 
     Returns:
         SearchResponse with results and metadata
@@ -111,6 +111,7 @@ def scrape_post_details(
     permalink: str,
     *,
     proxy: str | None = None,
+    session_cookie: str | None = None,
     timeout: float | None = None,
     cache_dir: str | None = None,
 ) -> PostDetailsResponse | None:
@@ -119,6 +120,7 @@ def scrape_post_details(
     Args:
         permalink: Post permalink (e.g., /r/python/comments/abc123/...)
         proxy: Optional proxy URL
+        session_cookie: Optional authenticated Reddit session cookie
         timeout: Request timeout in seconds
         cache_dir: Directory for API cache storage (disabled if None)
 
@@ -126,7 +128,12 @@ def scrape_post_details(
         PostDetailsResponse with title, body, and comments, or None if failed
     """
     scraper = get_reddit_scraper_service(
-        client=ClientOptions(proxy=proxy, timeout=timeout, cache_dir=cache_dir)
+        client=ClientOptions(
+            proxy=proxy,
+            session_cookie=session_cookie,
+            timeout=timeout,
+            cache_dir=cache_dir,
+        )
     )
     result = scraper.scrape_post_details(permalink)
     if result is None:
@@ -139,11 +146,12 @@ def scrape_post_details(
     )
 
 
-def scrape_user_data(
+def scrape_user_data(  # noqa: PLR0913
     username: str,
     *,
     limit: int | None = None,
     proxy: str | None = None,
+    session_cookie: str | None = None,
     timeout: float | None = None,
     cache_dir: str | None = None,
 ) -> UserDataResponse:
@@ -153,6 +161,7 @@ def scrape_user_data(
         username: Reddit username
         limit: Maximum items to return
         proxy: Optional proxy URL
+        session_cookie: Optional authenticated Reddit session cookie
         timeout: Request timeout in seconds
         cache_dir: Directory for API cache storage (disabled if None)
 
@@ -162,7 +171,12 @@ def scrape_user_data(
     resolver = get_default_reddit_scraper_resolver()
     limit = resolver.resolve_user_limit(limit)
     scraper = get_reddit_scraper_service(
-        client=ClientOptions(proxy=proxy, timeout=timeout, cache_dir=cache_dir)
+        client=ClientOptions(
+            proxy=proxy,
+            session_cookie=session_cookie,
+            timeout=timeout,
+            cache_dir=cache_dir,
+        )
     )
     items = scraper.scrape_user_data(username=username, limit=limit)
     return UserDataResponse(
@@ -180,7 +194,7 @@ def fetch_frontpage(
 
     Args:
         options: Optional feed options (limit, category, time filter)
-        client: Optional client options (proxy, timeout, cache)
+        client: Optional client options (proxy, session, timeout, cache)
 
     Returns:
         SearchResponse with frontpage posts
@@ -208,7 +222,7 @@ def fetch_all(
 
     Args:
         options: Optional feed options (limit, category, time filter)
-        client: Optional client options (proxy, timeout, cache)
+        client: Optional client options (proxy, session, timeout, cache)
 
     Returns:
         SearchResponse with r/all posts
@@ -236,7 +250,7 @@ def fetch_popular(
 
     Args:
         options: Optional feed options (limit, category, time filter, geo)
-        client: Optional client options (proxy, timeout, cache)
+        client: Optional client options (proxy, session, timeout, cache)
 
     Returns:
         SearchResponse with r/popular posts
@@ -267,7 +281,7 @@ def fetch_subreddit_posts(
     Args:
         subreddit: Subreddit name (without r/)
         options: Optional feed options (limit, category, time filter)
-        client: Optional client options (proxy, timeout, cache)
+        client: Optional client options (proxy, session, timeout, cache)
 
     Returns:
         SearchResponse with subreddit posts

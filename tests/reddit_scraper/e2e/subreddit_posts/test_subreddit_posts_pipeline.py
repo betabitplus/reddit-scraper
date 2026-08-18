@@ -100,7 +100,11 @@ def run_pipeline(
 ) -> dict:
     """Run subreddit search + hot posts pipeline."""
     with reddit_scraper.RedditScraper(
-        config=reddit_scraper.ScraperConfig(proxy=proxy, timeout=timeout)
+        config=reddit_scraper.ScraperConfig(
+            proxy=proxy,
+            session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
+            timeout=timeout,
+        )
     ) as scraper:
         search_results: dict[str, list[dict]] = {}
         for subreddit in target_subreddits:
@@ -143,8 +147,18 @@ def serialize_response(response: dict) -> dict:
 # =============================================================================
 
 
-def assert_pipeline_response(actual: object, snapshot: SnapshotAssertion) -> None:
-    """Verify the serialized response matches the committed scenario snapshot."""
+def assert_live_pipeline_response(actual: dict) -> None:
+    """Require live subreddit search and listing results to be non-empty."""
+    search_counts = actual.get("search_counts") or {}
+    assert search_counts
+    assert all(int(count) > 0 for count in search_counts.values())
+    assert int(actual.get("hot_posts_count") or 0) > 0
+    assert actual.get("hot_permalinks")
+
+
+def assert_pipeline_response(actual: dict, snapshot: SnapshotAssertion) -> None:
+    """Verify semantic behavior before matching the committed scenario snapshot."""
+    assert_live_pipeline_response(actual)
     assert actual == snapshot
 
 
@@ -238,6 +252,7 @@ def main() -> None:
             "[key]Permalink:[/key] "
             f"[value]{item.get('permalink') or item.get('link')}[/value]"
         )
+    assert_live_pipeline_response(result_summary)
 
 
 if __name__ == "__main__":

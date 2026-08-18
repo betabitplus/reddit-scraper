@@ -9,7 +9,8 @@ description: Representative public usage patterns for Reddit scraper. Use when y
 ## Overview
 
 This document shows representative caller workflows through the supported
-`reddit_scraper` root package.
+`reddit_scraper` root package. Keep `REDDIT_SESSION_COOKIE` in secret storage and
+pass it at runtime rather than hard-coding it.
 
 ## Examples
 
@@ -19,11 +20,16 @@ Use when:
 The caller needs a global Reddit query with typed search options.
 
 ```python
+import os
+
 import reddit_scraper
 
 response = reddit_scraper.search_reddit(
     "python",
     options=reddit_scraper.SearchOptions(limit=5),
+    client=reddit_scraper.ClientOptions(
+        session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
+    ),
 )
 print(response.count)
 ```
@@ -34,11 +40,16 @@ Use when:
 The caller needs posts from one named subreddit with listing options.
 
 ```python
+import os
+
 import reddit_scraper
 
 posts = reddit_scraper.fetch_subreddit_posts(
     "python",
     options=reddit_scraper.SubredditPostsOptions(limit=10, category="hot"),
+    client=reddit_scraper.ClientOptions(
+        session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
+    ),
 )
 ```
 
@@ -49,10 +60,16 @@ The caller needs an explicit scraper lifecycle with custom timeout or cache
 settings.
 
 ```python
+import os
+
 import reddit_scraper
 
 with reddit_scraper.RedditScraper(
-    config=reddit_scraper.ScraperConfig(timeout=15, cache_enabled=True),
+    config=reddit_scraper.ScraperConfig(
+        session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
+        timeout=15,
+        cache_enabled=True,
+    ),
 ) as scraper:
     results = scraper.search_reddit(
         "python",

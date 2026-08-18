@@ -23,13 +23,22 @@ def create_http_client(
     timeout: float,
     max_retries: int,
     proxy: str | None,
+    session_cookie: str | None,
 ) -> httpx.Client:
     """Create a configured HTTP client."""
     transport = httpx.HTTPTransport(retries=max_retries)
-    return httpx.Client(
+    client = httpx.Client(
         transport=transport,
         timeout=timeout,
         follow_redirects=True,
         proxy=proxy,
         trust_env=False,  # Enforce explicit proxy usage
     )
+    if session_cookie:
+        client.cookies.set(
+            "reddit_session",
+            session_cookie,
+            domain=".reddit.com",
+            path="/",
+        )
+    return client

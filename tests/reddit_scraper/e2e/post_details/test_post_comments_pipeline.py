@@ -104,7 +104,11 @@ def run_pipeline(
 ) -> dict:
     """Run post comment scraping pipeline."""
     with reddit_scraper.RedditScraper(
-        config=reddit_scraper.ScraperConfig(proxy=proxy, timeout=timeout)
+        config=reddit_scraper.ScraperConfig(
+            proxy=proxy,
+            session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
+            timeout=timeout,
+        )
     ) as scraper:
         search_results = scraper.search_reddit(
             search_query,
@@ -159,8 +163,17 @@ def serialize_response(response: dict) -> dict:
 # =============================================================================
 
 
-def assert_pipeline_response(actual: object, snapshot: SnapshotAssertion) -> None:
-    """Verify the serialized response matches the committed scenario snapshot."""
+def assert_live_pipeline_response(actual: dict) -> None:
+    """Require the live flow to resolve a real post with comments."""
+    assert actual.get("found") is True
+    assert int(actual.get("comment_count") or 0) > 0
+    assert actual.get("permalink")
+    assert int(actual.get("title_length") or 0) > 0
+
+
+def assert_pipeline_response(actual: dict, snapshot: SnapshotAssertion) -> None:
+    """Verify semantic behavior before matching the committed scenario snapshot."""
+    assert_live_pipeline_response(actual)
     assert actual == snapshot
 
 
@@ -232,6 +245,7 @@ def main() -> None:
     if comments:
         console.print("[info]Top 5 comment threads (raw JSON):[/info]")
         console.print_json({"threads": comments[:5]})
+    assert_live_pipeline_response(result_summary)
 
 
 if __name__ == "__main__":

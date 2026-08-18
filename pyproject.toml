@@ -415,14 +415,17 @@ allowed_prefixes = [ "Merge", "Revert", "WIP" ]
 primary_package = "reddit_scraper"
 package_names = [ "reddit_scraper" ]
 env_prefix = "REDDIT_SCRAPER"
-secrets.env_files = [ "browser-automation/proxy.sops.env" ]
+secrets.env_files = [
+  "account-automation/reddit.sops.env",
+  "browser-automation/proxy.sops.env",
+]
 
 # ---------------- Pip Audit (repository-scoped vulnerability waivers) ----------------
 [tool.pip-audit]
-# CVE-2025-69872: DiskCache 5.6.3 has no patched upstream release; exploitation requires attacker write access to the cache directory before a victim read, so this preserves the repository-specific risk acceptance already present before migration.
+# PYSEC-2026-2447: DiskCache 5.6.3 has no patched upstream release; exploitation requires attacker write access to the cache directory before a victim read, so this preserves the repository-specific risk acceptance already present before migration.
 # Remove when: Remove when a patched DiskCache release is available and adopted, or earlier if the cache trust boundary changes.
 ignore-vulns = [
-  "CVE-2025-69872",
+  "PYSEC-2026-2447",
 ]
 
 # ---------------- Import-linter architecture contracts ----------------
