@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/betabitplus/reddit-scraper/compare/v0.3.0...v0.3.1) (2026-08-18)
+
+
+### Bug Fixes
+
+* make reddit live e2e authoritative ([#48](https://github.com/betabitplus/reddit-scraper/issues/48)) ([830a6ad](https://github.com/betabitplus/reddit-scraper/commit/830a6ada9d35c62c3b2179cf8e5512f3ddddf2fe))
+
 ## v0.3.0 (2026-07-12)
 
 ### Feat
