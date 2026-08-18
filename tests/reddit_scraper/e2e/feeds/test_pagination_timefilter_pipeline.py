@@ -85,7 +85,11 @@ def load_inputs() -> dict:
 def run_pipeline(proxy: str | None, timeout: int) -> dict:
     """Run pagination and time filter pipeline."""
     with reddit_scraper.RedditScraper(
-        config=reddit_scraper.ScraperConfig(proxy=proxy, timeout=timeout)
+        config=reddit_scraper.ScraperConfig(
+            proxy=proxy,
+            session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
+            timeout=timeout,
+        )
     ) as scraper:
         top_posts = scraper.fetch_subreddit_posts(
             TOP_POSTS_SUBREDDIT,
@@ -142,8 +146,17 @@ def serialize_response(response: dict) -> dict:
 # =============================================================================
 
 
-def assert_pipeline_response(actual: object, snapshot: SnapshotAssertion) -> None:
-    """Verify the serialized response matches the committed scenario snapshot."""
+def assert_live_pipeline_response(actual: dict) -> None:
+    """Require both live pages and the time-filtered listing to be meaningful."""
+    assert int(actual.get("top_posts_count") or 0) > 0
+    assert int(actual.get("page1_count") or 0) > 0
+    assert int(actual.get("page2_count") or 0) > 0
+    assert int(actual.get("duplicate_titles_count") or 0) == 0
+
+
+def assert_pipeline_response(actual: dict, snapshot: SnapshotAssertion) -> None:
+    """Verify semantic behavior before matching the committed scenario snapshot."""
+    assert_live_pipeline_response(actual)
     assert actual == snapshot
 
 
@@ -237,6 +250,7 @@ def main() -> None:
         "[key]Permalink:[/key] "
         f"[value]{page2_sample.get('permalink') or page2_sample.get('link')}[/value]"
     )
+    assert_live_pipeline_response(result_summary)
 
 
 if __name__ == "__main__":

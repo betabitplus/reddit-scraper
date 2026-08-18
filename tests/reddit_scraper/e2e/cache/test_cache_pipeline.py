@@ -89,6 +89,7 @@ def run_pipeline(
     with reddit_scraper.RedditScraper(
         config=reddit_scraper.ScraperConfig(
             proxy=proxy,
+            session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
             timeout=timeout,
             cache_dir=cache_dir,
         )
@@ -135,8 +136,25 @@ def serialize_response(response: dict) -> dict:
 # =============================================================================
 
 
-def assert_pipeline_response(actual: object, snapshot: SnapshotAssertion) -> None:
-    """Verify the serialized response matches the committed scenario snapshot."""
+def assert_live_pipeline_response(actual: dict) -> None:
+    """Reject an empty live response that would make cache reuse meaningless."""
+    first_count = int(actual.get("first_count") or 0)
+    second_count = int(actual.get("second_count") or 0)
+    entries_before = int(actual.get("entries_before") or 0)
+    entries_after_first = int(actual.get("entries_after_first") or 0)
+    entries_after_second = int(actual.get("entries_after_second") or 0)
+
+    assert first_count > 0
+    assert second_count == first_count
+    assert entries_before == 0
+    assert entries_after_first > entries_before
+    assert entries_after_second == entries_after_first
+    assert actual.get("cache_enabled") is True
+
+
+def assert_pipeline_response(actual: dict, snapshot: SnapshotAssertion) -> None:
+    """Verify semantic behavior before matching the committed scenario snapshot."""
+    assert_live_pipeline_response(actual)
     assert actual == snapshot
 
 
@@ -236,6 +254,7 @@ def main() -> None:
         f"[value]{sample.get('permalink') or sample.get('link')}[/value]"
     )
     console.print(f"[key]Subreddit:[/key] [value]{sample.get('subreddit')}[/value]")
+    assert_live_pipeline_response(serialize_response(response))
 
 
 if __name__ == "__main__":

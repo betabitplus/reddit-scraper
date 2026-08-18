@@ -92,7 +92,11 @@ def run_pipeline(
 ) -> dict:
     """Run image discovery pipeline."""
     with reddit_scraper.RedditScraper(
-        config=reddit_scraper.ScraperConfig(proxy=proxy, timeout=timeout)
+        config=reddit_scraper.ScraperConfig(
+            proxy=proxy,
+            session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
+            timeout=timeout,
+        )
     ) as scraper:
         posts = scraper.fetch_subreddit_posts(
             primary_subreddit,
@@ -137,8 +141,15 @@ def serialize_response(response: dict) -> dict:
 # =============================================================================
 
 
-def assert_pipeline_response(actual: object, snapshot: SnapshotAssertion) -> None:
-    """Verify the serialized response matches the committed scenario snapshot."""
+def assert_live_pipeline_response(actual: dict) -> None:
+    """Require live image discovery to return at least one usable image URL."""
+    assert int(actual.get("image_count") or 0) > 0
+    assert actual.get("sample_urls")
+
+
+def assert_pipeline_response(actual: dict, snapshot: SnapshotAssertion) -> None:
+    """Verify semantic behavior before matching the committed scenario snapshot."""
+    assert_live_pipeline_response(actual)
     assert actual == snapshot
 
 
@@ -213,6 +224,7 @@ def main() -> None:
     if image_url:
         alt_text = sample.get("title") or "image"
         display(Markdown(f"![{alt_text}]({image_url})"))
+    assert_live_pipeline_response(result_summary)
 
 
 if __name__ == "__main__":

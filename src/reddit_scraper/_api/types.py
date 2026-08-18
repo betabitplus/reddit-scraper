@@ -167,6 +167,7 @@ class ClientOptions:
     """Client configuration for network and cache settings."""
 
     proxy: str | None = None
+    session_cookie: str | None = field(default=None, repr=False)
     timeout: float | None = None
     cache_dir: str | None = None
     cache_enabled: bool | None = None

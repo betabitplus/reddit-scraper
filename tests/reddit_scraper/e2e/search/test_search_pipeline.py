@@ -78,7 +78,11 @@ def load_inputs() -> dict:
 def run_pipeline(query: str, limit: int, proxy: str | None, timeout: int) -> list[dict]:
     """Run global Reddit search."""
     with reddit_scraper.RedditScraper(
-        config=reddit_scraper.ScraperConfig(proxy=proxy, timeout=timeout)
+        config=reddit_scraper.ScraperConfig(
+            proxy=proxy,
+            session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
+            timeout=timeout,
+        )
     ) as scraper:
         return scraper.search_reddit(
             query,
@@ -102,8 +106,16 @@ def serialize_response(results: list[dict]) -> dict:
 # =============================================================================
 
 
-def assert_pipeline_response(actual: object, snapshot: SnapshotAssertion) -> None:
-    """Verify the serialized response matches the committed scenario snapshot."""
+def assert_live_pipeline_response(actual: dict) -> None:
+    """Require live search to return real result evidence."""
+    assert int(actual.get("count") or 0) > 0
+    assert actual.get("sample_titles")
+    assert actual.get("subreddits")
+
+
+def assert_pipeline_response(actual: dict, snapshot: SnapshotAssertion) -> None:
+    """Verify semantic behavior before matching the committed scenario snapshot."""
+    assert_live_pipeline_response(actual)
     assert actual == snapshot
 
 
@@ -170,6 +182,7 @@ def main() -> None:
             "[key]Permalink:[/key] "
             f"[value]{item.get('permalink') or item.get('link')}[/value]"
         )
+    assert_live_pipeline_response(result_summary)
 
 
 if __name__ == "__main__":

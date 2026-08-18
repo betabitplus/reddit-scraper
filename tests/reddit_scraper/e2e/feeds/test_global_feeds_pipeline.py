@@ -81,7 +81,11 @@ def load_inputs() -> dict:
 def run_pipeline(proxy: str | None, timeout: int) -> dict:
     """Run global feeds pipeline."""
     with reddit_scraper.RedditScraper(
-        config=reddit_scraper.ScraperConfig(proxy=proxy, timeout=timeout)
+        config=reddit_scraper.ScraperConfig(
+            proxy=proxy,
+            session_cookie=os.getenv("REDDIT_SESSION_COOKIE"),
+            timeout=timeout,
+        )
     ) as scraper:
         frontpage = scraper.fetch_frontpage(
             options=reddit_scraper.FeedOptions(
@@ -130,8 +134,18 @@ def serialize_response(response: dict) -> dict:
 # =============================================================================
 
 
-def assert_pipeline_response(actual: object, snapshot: SnapshotAssertion) -> None:
-    """Verify the serialized response matches the committed scenario snapshot."""
+def assert_live_pipeline_response(actual: dict) -> None:
+    """Require non-personalized live feeds to return caller-visible posts."""
+    # An authenticated home/frontpage feed can legitimately be empty when the
+    # account has no subscribed-home content, so keep that count visible but do
+    # not turn account state into a product failure.
+    assert int(actual.get("all_count") or 0) > 0
+    assert int(actual.get("popular_count") or 0) > 0
+
+
+def assert_pipeline_response(actual: dict, snapshot: SnapshotAssertion) -> None:
+    """Verify semantic behavior before matching the committed scenario snapshot."""
+    assert_live_pipeline_response(actual)
     assert actual == snapshot
 
 
@@ -238,6 +252,7 @@ def main() -> None:
     )
     popular_link = popular_sample.get("permalink") or popular_sample.get("link")
     console.print(f"[key]Permalink:[/key] [value]{popular_link}[/value]")
+    assert_live_pipeline_response(result_summary)
 
 
 if __name__ == "__main__":
