@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.3](https://github.com/betabitplus/reddit-scraper/compare/v0.3.2...v0.3.3) (2026-08-25)
+
+
+### Miscellaneous Chores
+
+* release docs 0.3.3 ([#68](https://github.com/betabitplus/reddit-scraper/issues/68)) ([f73c130](https://github.com/betabitplus/reddit-scraper/commit/f73c13082c776f2945091ac42dba9b1b74ccc96f))
+
 ## [0.3.2](https://github.com/betabitplus/reddit-scraper/compare/v0.3.1...v0.3.2) (2026-08-25)
 
 

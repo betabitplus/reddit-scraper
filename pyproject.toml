@@ -10,7 +10,7 @@ requires = [ "setuptools>=82.0.1" ]
 # ==============================================================================
 [project]
 name = "reddit-scraper"
-version = "0.3.2"
+version = "0.3.3"
 description = "Standalone Reddit scraping library with replay-tested search, feeds, post, user, cache, retry, and media flows."
 readme = "README.md"
 keywords = [ "library", "python", "reddit", "scraper" ]
