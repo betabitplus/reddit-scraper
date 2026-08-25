@@ -35,7 +35,7 @@ If a shell has not loaded `.envrc`, run repo commands through `direnv exec .`:
 
 ```bash
 direnv exec . uv run pytest tests/reddit_scraper -m hermetic -q
-direnv exec . uv run pytest tests/reddit_scraper/e2e/public_boundary -q --no-cov
+direnv exec . uv run pytest tests/reddit_scraper/integration/test_config_lifecycle.py -q --no-cov
 ```
 
 ## Devcontainer
