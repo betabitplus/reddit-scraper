@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/betabitplus/reddit-scraper/compare/v0.3.1...v0.3.2) (2026-08-25)
+
+
+### Bug Fixes
+
+* make proxy usage opt in ([#64](https://github.com/betabitplus/reddit-scraper/issues/64)) ([282cf16](https://github.com/betabitplus/reddit-scraper/commit/282cf16d48488be7997681e44018fadc1b4de54f))
+
 ## [0.3.1](https://github.com/betabitplus/reddit-scraper/compare/v0.3.0...v0.3.1) (2026-08-18)
 
 
