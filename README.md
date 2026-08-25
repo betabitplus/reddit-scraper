@@ -38,7 +38,7 @@ scripts or documentation builds.
 ## Docs
 
 - [Package docs](docs/reddit_scraper/README.md)
-- [Usage](docs/reddit_scraper/usage.md)
+- [Executable examples](https://betabitplus.github.io/reddit-scraper/auto_examples/)
 - [Verification](docs/reddit_scraper/verification/README.md)
 - [Setup](SETUP.md)
 - [Contributing](CONTRIBUTING.md)
