@@ -9,8 +9,8 @@ description: Repository documentation index.
 ## WHAT
 
 - [reddit_scraper](reddit_scraper/README.md)
-  Indexes architecture, usage, dependency, and verification docs for the
-  package.
+  Indexes architecture, dependency, and verification docs for the package;
+  executable caller workflows are sourced from `examples/reddit_scraper`.
 
 ## WHY
 

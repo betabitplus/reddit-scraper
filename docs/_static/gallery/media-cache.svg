@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="280" viewBox="0 0 400 280" role="img" aria-labelledby="title desc">
+  <title id="title">Direct media cache</title>
+  <desc id="desc">An image download flowing directly into a reusable cache.</desc>
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#172033"/><stop offset="1" stop-color="#9a3412"/></linearGradient></defs>
+  <rect width="400" height="280" rx="28" fill="url(#bg)"/>
+  <rect x="51" y="70" width="117" height="94" rx="15" fill="#fff7ed"/><circle cx="79" cy="96" r="11" fill="#fb923c"/><path d="M65 145l30-31 24 23 15-15 22 23z" fill="#fdba74"/>
+  <path d="M178 117h54" stroke="#fed7aa" stroke-width="8" stroke-linecap="round"/><path d="M216 98l23 19-23 19" fill="none" stroke="#fed7aa" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="297" cy="81" rx="52" ry="18" fill="#fff7ed"/><path d="M245 81v73c0 11 23 20 52 20s52-9 52-20V81" fill="#fff7ed" stroke="#fdba74" stroke-width="5"/><ellipse cx="297" cy="154" rx="52" ry="20" fill="#ffedd5" stroke="#fdba74" stroke-width="5"/>
+  <text x="200" y="239" text-anchor="middle" fill="#ffffff" font-size="25" font-family="system-ui, sans-serif" font-weight="700">Direct + cache</text>
+</svg>

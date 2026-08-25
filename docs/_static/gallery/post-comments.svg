@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="280" viewBox="0 0 400 280" role="img" aria-labelledby="title desc">
+  <title id="title">Post and comments</title>
+  <desc id="desc">A Reddit post opening into a branching comment conversation.</desc>
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#111827"/><stop offset="1" stop-color="#7f1d1d"/></linearGradient></defs>
+  <rect width="400" height="280" rx="28" fill="url(#bg)"/>
+  <rect x="55" y="66" width="126" height="116" rx="18" fill="#fff7ed"/><rect x="76" y="91" width="84" height="9" rx="4" fill="#f97316"/><rect x="76" y="116" width="66" height="8" rx="4" fill="#fdba74"/><rect x="76" y="139" width="75" height="8" rx="4" fill="#fdba74"/>
+  <path d="M181 124h42M223 124v-42M223 124v44" fill="none" stroke="#fed7aa" stroke-width="7" stroke-linecap="round"/>
+  <rect x="247" y="56" width="99" height="49" rx="16" fill="#fff7ed"/><rect x="247" y="143" width="99" height="49" rx="16" fill="#ffedd5"/>
+  <path d="M269 79h55M269 166h55" stroke="#ea580c" stroke-width="7" stroke-linecap="round"/>
+  <text x="200" y="239" text-anchor="middle" fill="#ffffff" font-size="25" font-family="system-ui, sans-serif" font-weight="700">Post + comments</text>
+</svg>
