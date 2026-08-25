@@ -84,7 +84,7 @@ DEFAULT_MEDIA_DOWNLOAD_DOWNLOAD_THUMBNAILS: bool = False
 # Options are true or false.
 DEFAULT_MEDIA_DOWNLOAD_SKIP_HEAD: bool = False
 # Options are true or false.
-DEFAULT_MEDIA_DOWNLOAD_USE_PROXY_FOR_SMALL: bool = True
+DEFAULT_MEDIA_DOWNLOAD_USE_PROXY_FOR_SMALL: bool = False
 # Options are true or false.
 DEFAULT_MEDIA_DOWNLOAD_USE_PROXY_FOR_LARGE: bool = False
 # Range is ≥ 0.

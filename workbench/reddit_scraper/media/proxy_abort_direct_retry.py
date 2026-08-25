@@ -111,7 +111,10 @@ def run_pipeline(*, proxy: str | None = None) -> dict[str, Any]:
     if not proxy:
         return {
             "proxy_prerequisite_met": False,
-            "message": "Set HTTP_PROXY or HTTPS_PROXY to exercise proxy abort.",
+            "message": (
+                "Set REDDIT_SCRAPER_USE_PROXY=1 with HTTP_PROXY or HTTPS_PROXY "
+                "to exercise proxy abort."
+            ),
         }
 
     post = _discover_image_post(proxy=proxy)
@@ -205,9 +208,9 @@ if __name__ == "__main__":
 # Expected Output
 # =============================================================================
 EXPECTED_OUTPUT = """
-Real run without HTTP_PROXY/HTTPS_PROXY:
+Default direct run:
 Demo Skipped
-Set HTTP_PROXY or HTTPS_PROXY to exercise proxy abort.
+Set REDDIT_SCRAPER_USE_PROXY=1 with HTTP_PROXY or HTTPS_PROXY to exercise proxy abort.
 
 Real run with proxy:
 {

@@ -28,12 +28,12 @@ response = reddit_scraper.search_reddit(
 print(response.count)
 ```
 
-Proxy-backed e2e and workbench flows read `HTTP_PROXY` / `HTTPS_PROXY` from
-`betabit-secrets/browser-automation/proxy.sops.env` through
-`scripts/env/secrets.sh`, which is wired by `.envrc` from the
-`[tool.ternforge.secrets]` declaration in `pyproject.toml`. The loader
-clones `https://github.com/betabitplus/betabit-secrets.git` into the user data
-cache when the checkout is missing.
+Live e2e and workbench flows use direct network access by default. `.envrc`
+still loads the declared Reddit session and proxy secret material from
+`betabit-secrets`, but removes proxy environment variables unless
+`REDDIT_SCRAPER_USE_PROXY=1` is explicitly set. The opt-in keeps dedicated
+proxy-routing probes available without spending proxy quota during ordinary
+scripts or documentation builds.
 
 ## Docs
 

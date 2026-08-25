@@ -27,7 +27,9 @@ _THUMBNAIL_SENTINELS = {"", "self", "default", "nsfw", "spoiler"}
 
 
 def get_proxy() -> str | None:
-    """Read the optional live-run proxy from the process environment."""
+    """Read the live-run proxy only when proxy use is explicitly enabled."""
+    if os.getenv("REDDIT_SCRAPER_USE_PROXY") != "1":
+        return None
     return os.getenv("HTTP_PROXY") or os.getenv("HTTPS_PROXY")
 
 

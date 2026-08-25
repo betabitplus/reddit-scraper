@@ -64,6 +64,13 @@ def test_media_route_selects_proxy_for_small_files_when_enabled() -> None:
     assert should_use_proxy(SMALL_IMAGE_URL, estimated_size_mb=0.1, config=config)
 
 
+def test_media_route_defaults_to_direct_for_small_files() -> None:
+    """Keep proxy quota opt-in rather than part of the product default."""
+    config = get_default_media_config()
+    assert not config.use_proxy_for_small
+    assert not should_use_proxy(SMALL_IMAGE_URL, estimated_size_mb=0.1, config=config)
+
+
 def test_media_route_selects_direct_for_large_files_when_large_proxy_disabled() -> None:
     """Keep large-media direct routing stable when large proxying is disabled."""
     config = _proxy_routing_config()

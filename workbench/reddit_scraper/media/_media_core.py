@@ -50,7 +50,7 @@ class MediaConfig:
     max_file_size_mb: float = 5.0
     cache_media: bool = True
     skip_head: bool = False
-    use_proxy_for_small: bool = True
+    use_proxy_for_small: bool = False
     use_proxy_for_large: bool = False
     proxy_size_threshold_mb: float = 2.0
 
