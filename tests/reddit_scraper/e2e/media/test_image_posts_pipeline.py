@@ -59,7 +59,9 @@ MAX_IMAGES = 2
 
 
 def get_proxy() -> str | None:
-    """Get proxy from environment variable (demo-only)."""
+    """Get proxy only for an explicitly enabled proxy demo."""
+    if os.getenv("REDDIT_SCRAPER_USE_PROXY") != "1":
+        return None
     return os.getenv("HTTP_PROXY") or os.getenv("HTTPS_PROXY")
 
 
