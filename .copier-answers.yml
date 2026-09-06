@@ -1,4 +1,4 @@
-_commit: v1.9.4
+_commit: v1.21.4
 _src_path: https://github.com/betabitplus/ternforge-template-py-library.git
 author_email: 8123085+betabitplus@users.noreply.github.com
 author_name: betabitplus
@@ -6,25 +6,6 @@ ci_playwright_browsers: []
 config_class_name: RedditScraperConfig
 copyright_year: '2026'
 devcontainer_apt_packages: {}
-e2e_slices:
--   name: public-boundary
-    path: tests/reddit_scraper/e2e/public_boundary
--   name: cache
-    path: tests/reddit_scraper/e2e/cache
--   name: feeds
-    path: tests/reddit_scraper/e2e/feeds
--   name: media
-    path: tests/reddit_scraper/e2e/media
--   name: post-details
-    path: tests/reddit_scraper/e2e/post_details
--   name: retry
-    path: tests/reddit_scraper/e2e/retry
--   name: search
-    path: tests/reddit_scraper/e2e/search
--   name: subreddit-posts
-    path: tests/reddit_scraper/e2e/subreddit_posts
--   name: user-data
-    path: tests/reddit_scraper/e2e/user_data
 env_prefix: REDDIT_SCRAPER
 error_class_name: RedditScraperError
 github_owner: betabitplus
