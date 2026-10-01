@@ -99,7 +99,7 @@ specifications = [
   "allure-pytest-bdd>=2.16,<3",
   "py-lib-testkit",
   "pytest>=9.1.0",
-  "pytest-bdd>=8.1,<9",
+  "pytest-bdd>=9,<10",
   "pytest-recording>=0.13.4",
 ]
 
